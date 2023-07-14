@@ -1,3 +1,9 @@
+const plays = require("./plays.json"); // 需要全局？？？
+
+function playFor(aPerformance) {
+  return plays[aPerformance.playID];
+}
+
 // 为参数取名时都默认带上其类型名。
 // 傻瓜都能写出计算机可以理解的代码。唯有能写出人类容易理解的代码的，才是优秀的程序员。
 function amountFor(aPerformance, play) {
@@ -39,7 +45,7 @@ function statement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+    const play = playFor(perf);
     let thisAmount = amountFor(perf, play);
 
     // add volume credits
