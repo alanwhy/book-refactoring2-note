@@ -4,6 +4,14 @@ function playFor(aPerformance) {
   return plays[aPerformance.playID];
 }
 
+function volumeCreditsFor(perf) {
+  let volumeCredits = 0;
+  volumeCredits += Math.max(perf.audience - 30, 0);
+  if ("comedy" === playFor(perf).type)
+    volumeCredits += Math.floor(perf.audience / 5);
+  return volumeCredits;
+}
+
 // 为参数取名时都默认带上其类型名。
 // 傻瓜都能写出计算机可以理解的代码。唯有能写出人类容易理解的代码的，才是优秀的程序员。
 function amountFor(aPerformance, play) {
@@ -45,11 +53,7 @@ function statement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
   for (let perf of invoice.performances) {
-    // add volume credits
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if ("comedy" === playFor(perf).type)
-      volumeCredits += Math.floor(perf.audience / 5);
+    volumeCredits += volumeCreditsFor(perf);
 
     // print line for this order
     result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
