@@ -20,6 +20,14 @@ function volumeCreditsFor(aPerformance) {
   return result;
 }
 
+function totalVolumeCredits() {
+  let volumeCredits = 0;
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
+  }
+  return volumeCredits;
+}
+
 // 为参数取名时都默认带上其类型名。
 // 傻瓜都能写出计算机可以理解的代码。唯有能写出人类容易理解的代码的，才是优秀的程序员。
 function amountFor(aPerformance, play) {
@@ -50,6 +58,7 @@ function amountFor(aPerformance, play) {
 // 无论每次重构多么简单，养成重构后即运行测试的习惯非常重要。
 // 小步修改，每次修改后就运行测试。如果我改动了太多东西，犯错时就可能陷入麻烦的调试，并为此耗费大把时间。小步修改，以及它带来的频繁反馈，正是防止混乱的关键。
 // 重构技术就是以微小的步伐修改程序。如果你犯下错误，很容易便可发现它。
+// 如果重构引入了性能损耗，先完成重构，再做性能优化。
 
 function statement(invoice, plays) {
   let totalAmount = 0;
@@ -61,13 +70,9 @@ function statement(invoice, plays) {
     } seats)\n`;
     totalAmount += amountFor(perf);
   }
-  // 更新 volumeCredits 变量相关的代码都集中到一起，有利于以查询取代临时变量（178）手法的施展
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-  }
+
   result += `Amount owed is ${usd(totalAmount)}\n`;
-  result += `You earned ${volumeCredits} credits\n`;
+  result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
 }
 
