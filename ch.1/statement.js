@@ -21,11 +21,11 @@ function volumeCreditsFor(aPerformance) {
 }
 
 function totalVolumeCredits() {
-  let volumeCredits = 0;
+  let result = 0;
   for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
+    result += volumeCreditsFor(perf);
   }
-  return volumeCredits;
+  return result;
 }
 
 // 为参数取名时都默认带上其类型名。
@@ -52,6 +52,14 @@ function amountFor(aPerformance, play) {
   return result;
 }
 
+function totalAmount() {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += amountFor(perf);
+  }
+  return result;
+}
+
 // 如果你要给程序添加一个特性，但发现代码因缺乏良好的结构而不易于进行更改，那就先重构那个程序，使其比较容易添加该特性，然后再添加该特性。
 // 得确保即将修改的代码拥有一组可靠的测试。
 // 重构前，先检查自己是否有一套可靠的测试集。这些测试必须有自我检验能力。
@@ -61,17 +69,13 @@ function amountFor(aPerformance, play) {
 // 如果重构引入了性能损耗，先完成重构，再做性能优化。
 
 function statement(invoice, plays) {
-  let totalAmount = 0;
   let result = `Statement for ${invoice.customer}\n`;
   for (let perf of invoice.performances) {
-    // print line for this order
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)\n`;
-    totalAmount += amountFor(perf);
   }
-
-  result += `Amount owed is ${usd(totalAmount)}\n`;
+  result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
 }
