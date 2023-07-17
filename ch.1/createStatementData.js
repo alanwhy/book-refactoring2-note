@@ -25,6 +25,14 @@ class PerformanceCalculator {
     }
     return result;
   }
+
+  get volumeCredits() {
+    let result = 0;
+    result += Math.max(this.performance.audience - 30, 0);
+    if ("comedy" === this.play.type)
+      result += Math.floor(this.performance.audience / 5);
+    return result;
+  }
 }
 
 // 创建演出计算器
@@ -42,9 +50,9 @@ function createStatementData(invoice, plays) {
       playFor(aPerformance)
     );
     const result = Object.assign({}, aPerformance);
-    result.play = playFor(result);
-    result.amount = amountFor(result);
-    result.volumeCredits = volumeCreditsFor(result);
+    result.play = calculator.play;
+    result.amount = calculator.amount;
+    result.volumeCredits = calculator.volumeCredits;
     return result;
   }
 
