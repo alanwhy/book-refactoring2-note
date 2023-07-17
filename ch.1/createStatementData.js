@@ -44,8 +44,12 @@ function createStatementData(invoice, plays) {
   result.totalVolumeCredits = totalVolumeCredits(result);
   return result;
 
+  function createPerformanceCalculator(aPerformance, aPlay) {
+    return new PerformanceCalculator(aPerformance, aPlay);
+  }
+
   function enrichPerformance(aPerformance) {
-    const calculator = new PerformanceCalculator(
+    const calculator = createPerformanceCalculator(
       aPerformance,
       playFor(aPerformance)
     );
