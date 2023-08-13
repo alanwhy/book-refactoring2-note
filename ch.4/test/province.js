@@ -34,6 +34,25 @@ describe("province", function () {
     expect(asia.shortfall).equal(-6);
     expect(asia.profit).equal(292);
   });
+
+  it("zero demand", function () {
+    // 如果拿到的是数值类型，0 会是不错的边界条件
+    asia.demand = 0;
+    expect(asia.shortfall).equal(-25);
+    expect(asia.profit).equal(0);
+  });
+  it("negative demand", function () {
+    // 负值同样值得一试
+    asia.demand = -1;
+    expect(asia.shortfall).equal(-26);
+    expect(asia.profit).equal(-10);
+  });
+  it("empty string demand", function () {
+    // 考虑可能出错的边界条件，把测试火力集中在那儿。
+    asia.demand = "";
+    expect(asia.shortfall).NaN;
+    expect(asia.profit).NaN;
+  });
 });
 
 // describe("province", function () {
@@ -42,3 +61,36 @@ describe("province", function () {
 //     assert.equal(asia.shortfall, 5);
 //   });
 // });
+
+describe("no producers", function () {
+  let noProducers;
+  beforeEach(function () {
+    // 当我拿到一个集合（比如说此例中的生产商集合）时，我总想看看集合为空时会发生什么
+    const data = {
+      name: "No proudcers",
+      producers: [],
+      demand: 30,
+      price: 20,
+    };
+    noProducers = new Province(data);
+  });
+  it("shortfall", function () {
+    expect(noProducers.shortfall).equal(30);
+  });
+  it("profit", function () {
+    expect(noProducers.profit).equal(0);
+  });
+});
+
+describe("string for producers", function () {
+  it("", function () {
+    const data = {
+      name: "String producers",
+      producers: "",
+      demand: 30,
+      price: 20,
+    };
+    const prov = new Province(data);
+    expect(prov.shortfall).equal(0);
+  });
+});
